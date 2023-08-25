@@ -1,0 +1,67 @@
+// Select.module.scss
+
+.select-container {
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+.select-input-container {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.selected-options {
+  flex: 1;
+  color: #333;
+}
+
+.placeholder {
+  color: #888;
+}
+
+.dropdown-icon {
+  width: 10px;
+  height: 10px;
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1;
+}
+
+.option,
+.option-selected {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.option:hover {
+  background-color: #f4f4f4;
+}
+
+.option-selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.option-selected:hover {
+  background-color: #0056b3;
+}
+
+.options-list.show {
+  display: block;
+}
