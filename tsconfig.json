@@ -23,6 +23,9 @@
   "extends": "./tsconfig.paths.json",
   "include": [
     "src",
-    "declaration.d.ts"
+    "declaration.d.ts",
+    "cypress",
+    "**/*.ts",
+    "cypress.config.js"
   ]
 }
