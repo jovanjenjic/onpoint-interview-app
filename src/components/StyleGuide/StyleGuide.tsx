@@ -23,11 +23,11 @@ export const fonts = () => {
       --font-a-1: normal normal 400 16px/24px 'Inter', sans-serif;
       --font-a-2: normal normal 400 12px/20px 'Inter', sans-serif;
 
-      --font-b-2: normal normal 500 15px/20px 'Inter', sans-serif;
-      --font-b-3: normal normal 500 12px/18px 'Inter', sans-serif;
+      --font-b-1: normal normal 500 15px/20px 'Inter', sans-serif;
+      --font-b-2: normal normal 500 12px/18px 'Inter', sans-serif;
 
-      --font-c-2: normal normal 600 12px/18px 'Inter', sans-serif;
-      --font-c-3: normal normal 600 10px/16px 'Inter', sans-serif;
+      --font-c-1: normal normal 600 14px/18px 'Inter', sans-serif;
+      --font-c-2: normal normal 600 10px/16px 'Inter', sans-serif;
     `;
 };
 
