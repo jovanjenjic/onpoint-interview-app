@@ -1,0 +1,120 @@
+@import '../../styles/mixin.scss';
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+  position: relative;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.input-content {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  color: #333;
+
+  &__selected-item {
+    display: flex;
+    align-items: center;
+    min-height: 27px;
+    margin: 2px;
+    font-size: 13px;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 2px 10px;
+  }
+
+  &__input {
+    padding: 8px;
+    border: none;
+    flex: 1;
+    outline: none;
+  }
+}
+
+.dropdown {
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 5px;
+  font-size: 16px;
+  @include styled-scroll(4px);
+
+  &__option {
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &--selected {
+      background-color: #ebf2ff;
+
+      &:hover {
+        background-color: #dde9ff;
+      }
+    }
+
+    &--no-result {
+      font-size: 13px;
+    }
+
+    &--loading {
+      font-size: 13px;
+    }
+  }
+}
+
+.arrow-icon  {
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px 8px 0;
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  transform: rotate(225deg);
+
+  &--active {
+    margin-top: -5px;
+    transform: rotate(45deg);
+  }
+}
+
+.spinner-icon {
+  width: 8px;
+  height: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.x-icon {
+  cursor: pointer;
+  margin-left: 8px;
+  &::before {
+    content: "X";
+    font-size: 12px;
+    color: #333;
+  }
+}  
