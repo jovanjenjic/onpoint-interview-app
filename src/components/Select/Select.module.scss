@@ -1,67 +1,112 @@
-// Select.module.scss
+@import '../../styles/mixin.scss';
 
-.select-container {
-  position: relative;
-  font-family: Arial, sans-serif;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.select-input-container {
+.container {
+  position: relative;
+}
+
+.input-wrapper {
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 4px;
   border: 1px solid #ccc;
-  cursor: pointer;
+  border-radius: 5px;
 }
 
-.selected-options {
+.input-content {
+  display: flex;
+  flex-wrap: wrap;
   flex: 1;
   color: #333;
+
+  &__selected-item {
+    display: flex;
+    align-items: center;
+    min-height: 27px;
+    margin: 2px;
+    font-size: 13px;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 2px 10px;
+  }
+
+  &__input {
+    padding: 8px;
+    border: none;
+    flex: 1;
+    outline: none;
+  }
 }
 
-.placeholder {
-  color: #888;
-}
-
-.dropdown-icon {
-  width: 10px;
-  height: 10px;
-  border: solid #333;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-.options-list {
-  list-style: none;
+.dropdown {
   padding: 0;
   margin: 0;
   border: 1px solid #ccc;
   border-top: none;
-  position: absolute;
-  width: 100%;
-  background-color: #fff;
-  z-index: 1;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 5px;
+  font-size: 16px;
+  @include styled-scroll(4px);
+
+  &__option {
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &--selected {
+      background-color: #ebf2ff;
+
+      &:hover {
+        background-color: #dde9ff;
+      }
+    }
+  }
 }
 
-.option,
-.option-selected {
-  padding: 10px;
+.arrow-icon  {
+  width: 8px;
+  height: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  margin: 5px 8px 0;
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  transform: rotate(225deg);
+
+  &--active {
+    margin-top: -5px;
+    transform: rotate(45deg);
+  }
 }
 
-.option:hover {
-  background-color: #f4f4f4;
+.spinner-icon {
+  width: 8px;
+  height: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.option-selected {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.option-selected:hover {
-  background-color: #0056b3;
-}
-
-.options-list.show {
-  display: block;
-}
+.x-icon {
+  cursor: pointer;
+  margin-left: 8px;
+  &::before {
+    content: "X";
+    font-size: 12px;
+    color: #333;
+  }
+}  

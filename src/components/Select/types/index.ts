@@ -1,1 +1,5 @@
-export interface Emprty {}
+export interface SelectProps {
+  selectValue: string[];
+  isLoading?: boolean;
+  multiple?: boolean;
+}
