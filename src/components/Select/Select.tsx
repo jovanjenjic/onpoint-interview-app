@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from 'react';
 import styles from './Select.module.scss';
 import { SelectProps } from './types';
-import { useClickOutside } from '@base/hooks';
+import { useClickOutside } from '../../hooks';
 
 const Select: FC<SelectProps> = ({ dropdownValues, isLoading, multiple }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
