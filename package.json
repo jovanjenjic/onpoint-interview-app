@@ -21,7 +21,7 @@
     "start": "craco start",
     "eslint": "eslint src --fix",
     "build": "craco build",
-    "test": "craco test",
+    "cy-open": "cypress open",
     "eject": "craco eject"
   },
   "eslintConfig": {
@@ -47,6 +47,7 @@
     "@typescript-eslint/parser": "^6.4.1",
     "craco": "^0.0.3",
     "craco-alias": "^3.0.1",
+    "cypress": "^12.17.4",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
