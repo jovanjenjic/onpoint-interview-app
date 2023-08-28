@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from '@components/Select/Select';
+import Button from './components/Button/Button';
 
 const dropdownValues: string[] = [
   'Option 1',
@@ -16,6 +17,7 @@ const dropdownValues: string[] = [
 function App() {
   return (
     <div style={{ maxWidth: '600px', margin: 'auto' }}>
+      <Button type="primary" text="Submit" onClick={() => {}} />
       <Select
         dropdownValues={dropdownValues}
         isLoading={false}
