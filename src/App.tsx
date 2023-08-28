@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from '@components/Select/Select';
 
-const selectValue: string[] = [
+const dropdownValues: string[] = [
   'Option 1',
   'Option 2',
   'Option 3',
@@ -15,8 +15,12 @@ const selectValue: string[] = [
 ];
 function App() {
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto' }}>
-      <Select selectValue={selectValue} isLoading={false} multiple={true} />
+    <div style={{ maxWidth: '600px', margin: 'auto' }}>
+      <Select
+        dropdownValues={dropdownValues}
+        isLoading={false}
+        multiple={true}
+      />
     </div>
   );
 }

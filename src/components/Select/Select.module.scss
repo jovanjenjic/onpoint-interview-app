@@ -73,6 +73,14 @@
         background-color: #dde9ff;
       }
     }
+
+    &--no-result {
+      font-size: 13px;
+    }
+
+    &--loading {
+      font-size: 13px;
+    }
   }
 }
 

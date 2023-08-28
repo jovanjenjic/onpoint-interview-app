@@ -1,5 +1,5 @@
 export interface SelectProps {
-  selectValue: string[];
+  dropdownValues: string[];
   isLoading?: boolean;
   multiple?: boolean;
 }
