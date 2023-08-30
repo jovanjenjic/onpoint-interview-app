@@ -3,7 +3,12 @@ import styles from './Select.module.scss';
 import { SelectProps } from './types';
 import { useClickOutside } from '../../hooks';
 
-const Select: FC<SelectProps> = ({ dropdownValues, isLoading, multiple }) => {
+const Select: FC<SelectProps> = ({
+  dropdownValues,
+  isLoading,
+  multiple,
+  onInputChangeHandler,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterText, setFilterText] = useState<string>('');
@@ -36,12 +41,14 @@ const Select: FC<SelectProps> = ({ dropdownValues, isLoading, multiple }) => {
   };
 
   const onDeleteAllItems = (e: React.MouseEvent<HTMLDivElement>) => {
+    onInputChangeHandler('');
     e.stopPropagation();
     setSelectedItems([]);
     setFilterText('');
   };
 
   const onInputChange = (value: string) => {
+    onInputChangeHandler(value);
     setFilterText(value);
     if (!isOpen) {
       setIsOpen(true);
@@ -122,4 +129,4 @@ const Select: FC<SelectProps> = ({ dropdownValues, isLoading, multiple }) => {
   );
 };
 
-export default Select;
+export default React.memo(Select);
