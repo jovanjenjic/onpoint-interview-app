@@ -1,28 +1,32 @@
 import React from 'react';
 import Select from '@components/Select/Select';
-import Button from './components/Button/Button';
-import Styleguide from './components/StyleGuide/StyleGuide';
+import { useFetch } from '@hooks/index';
+import Button from '@components/Button/Button';
+import { ApiResponse } from '@components/Select/types';
 
-const dropdownValues: string[] = [
-  'Option 1',
-  'Option 2',
-  'Option 3',
-  'Option 4',
-  'Option 5',
-  'Option 6',
-  'Option 7',
-  'Option 8',
-  'Option 9',
-  'Option 10',
-];
 function App() {
+  const {
+    loading,
+    data = [],
+    refetch,
+  } = useFetch<ApiResponse[]>({
+    cache: {
+      enabled: true,
+      expiryDuration: 10,
+    },
+  });
+
+  const handleInputChange = React.useCallback((newQueryString: string) => {
+    refetch(newQueryString);
+  }, []);
+
   return (
     <div style={{ maxWidth: '600px', margin: 'auto' }}>
-      <Styleguide />
       <Select
-        dropdownValues={dropdownValues}
-        isLoading={false}
+        dropdownValues={data.map((data) => data.name)}
+        isLoading={loading}
         multiple={true}
+        onInputChangeHandler={handleInputChange}
       />
       <Button type="primary" text="Submit" onClick={() => {}} />
     </div>

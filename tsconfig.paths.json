@@ -7,7 +7,9 @@
             "@features/*": ["./features/*"],
             "@utils/*": ["./utils/*"],
             "@pages/*": ["./pages/*"],
-            "@api/*": ["./api/*"]
+            "@api/*": ["./api/*"],
+            "@hooks/*": ["./hooks/*"],
+            "@context/*": ["./context/*"]
         }
     }
   }

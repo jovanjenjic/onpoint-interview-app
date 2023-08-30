@@ -12,6 +12,7 @@ describe('Single Select Component', () => {
           dropdownValues={dropdownValues}
           isLoading={false}
           multiple={false}
+          onInputChangeHandler={() => {}}
         />
       </>,
     );
@@ -58,6 +59,7 @@ describe('Loading Select Component', () => {
           dropdownValues={dropdownValues}
           isLoading={true}
           multiple={false}
+          onInputChangeHandler={() => {}}
         />
       </>,
     );
@@ -74,7 +76,12 @@ describe('No Result Select Component', () => {
     cy.mount(
       <>
         <Styleguide />
-        <Select dropdownValues={[]} isLoading={false} multiple={false} />
+        <Select
+          dropdownValues={[]}
+          isLoading={false}
+          multiple={false}
+          onInputChangeHandler={() => {}}
+        />
       </>,
     );
   });
@@ -93,6 +100,7 @@ describe('Multiple Select Component', () => {
           dropdownValues={dropdownValues}
           isLoading={false}
           multiple={true}
+          onInputChangeHandler={() => {}}
         />
       </>,
     );
