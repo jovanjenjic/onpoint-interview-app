@@ -15,4 +15,5 @@ export interface SelectProps {
   multiple?: boolean;
   itemKey?: string;
   onInputChangeHandler: (value: string) => void;
+  defaultValue?: DropdownValues[] | DropdownValues;
 }

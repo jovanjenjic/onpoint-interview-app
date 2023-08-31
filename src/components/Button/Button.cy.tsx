@@ -26,7 +26,7 @@ describe('Button primary', () => {
   it('has a blue background when type is primary', () => {
     cy.get('button')
       .should('have.css', 'background-color')
-      .and('eq', 'rgb(44, 139, 255)');
+      .and('eq', 'rgb(13, 110, 230)');
   });
 
   it('displays the correct text in the button', () => {
@@ -44,7 +44,7 @@ describe('Button primary', () => {
   it('changes background color on hover', () => {
     cy.get('button')
       .trigger('mouseover')
-      .should('have.css', 'background-color', 'rgb(44, 139, 255)');
+      .should('have.css', 'background-color', 'rgb(13, 110, 230)');
   });
 });
 

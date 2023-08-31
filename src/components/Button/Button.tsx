@@ -2,13 +2,19 @@ import React from 'react';
 import { ButtonProps } from './types';
 import styles from './Button.module.scss';
 
-const Button: React.FC<ButtonProps> = ({ type, text, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ type, text, onClick, isLoading }) => {
+  const onClickHandler = () => {
+    if (!isLoading) {
+      onClick();
+    }
+  };
   return (
     <button
+      style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
       className={`
       ${styles['button']}  
       ${styles[`button${type === 'primary' ? '__primary' : '__secondary'}`]}`}
-      onClick={onClick}
+      onClick={onClickHandler}
     >
       {text}
     </button>

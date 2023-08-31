@@ -1,10 +1,19 @@
 import React from 'react';
 import Select from '@components/Select/Select';
-import { useFetch } from '@hooks/index';
 import Button from '@components/Button/Button';
-import { ApiResponse } from '@components/Select/types';
+import { ApiResponse, DropdownValues } from '@components/Select/types';
+import styles from './App.module.scss';
+import useFetch from './hooks/useFetch';
 
 function App() {
+  const [defaultValue, setDefaultValue] = React.useState<
+    DropdownValues | DropdownValues[]
+  >([
+    {
+      id: 1,
+      name: 'Option 1',
+    },
+  ]);
   const {
     loading,
     data = [],
@@ -15,20 +24,29 @@ function App() {
       expiryDuration: 100,
     },
   });
+
   const handleInputChange = (newQueryString: string) => {
     refetch(newQueryString);
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto' }}>
+    <div className={styles.wrapper}>
       <Select
         dropdownValues={data}
         itemKey="name"
         isLoading={loading}
         multiple={true}
         onInputChangeHandler={handleInputChange}
+        defaultValue={defaultValue}
       />
-      <Button type="primary" text="Submit" onClick={() => {}} />
+      <div className={styles['button-wrapper']}>
+        <Button
+          type="primary"
+          text="Submit"
+          isLoading={loading}
+          onClick={() => setDefaultValue((prev) => (prev.length ? [] : prev))}
+        />
+      </div>
     </div>
   );
 }

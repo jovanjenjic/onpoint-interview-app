@@ -2,7 +2,7 @@ import React from 'react';
 
 export const blueColor = () => {
   return `
-      --b-100: #2c8bff;
+      --b-100: #0d6ee6;
       --b-200: #139bff;
     `;
 };

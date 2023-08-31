@@ -155,4 +155,20 @@ describe('Multiple Select Component', () => {
     cy.get('[class*=dropdown__option]').should('have.length', 1);
     cy.get('[class*=dropdown__option]').should('contain', searchTerm);
   });
+
+  it('Should have correct ARIA attributes and labels', () => {
+    cy.get('[aria-label="Clear options"]').should('exist');
+    cy.get('[aria-label="Open dropdown"]').should('exist');
+    cy.get('input').click();
+    cy.get(`[aria-label="${dropdownValues[0].name}"]`).should('exist');
+  });
+
+  it('Should select an option on click', () => {
+    cy.get('[aria-label="Open dropdown"]').click();
+    cy.get('[role="listbox"]').should('be.visible');
+    cy.get('input').type('{downarrow}');
+    cy.get('input').type('{downarrow}');
+    cy.get('input').type('{enter}');
+    cy.get('[class*=dropdown__option]').should('contain', 'Option 1');
+  });
 });

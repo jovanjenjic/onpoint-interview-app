@@ -1,54 +1,68 @@
-import React, { FC, useState, useRef } from 'react';
+import React from 'react';
+import useClickOutside from '../../hooks/useClickOutside';
+import useKeyboardListNavigation from '../../hooks/useKeyboardListNavigation';
 import styles from './Select.module.scss';
-import { SelectProps } from './types';
-import { useClickOutside } from '../../hooks';
+import { DropdownValues, SelectProps } from './types';
 
-const Select: FC<SelectProps> = ({
+const Select: React.FC<SelectProps> = ({
   dropdownValues,
   itemKey = 'id',
   isLoading,
   multiple,
   onInputChangeHandler,
+  defaultValue,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
 
-  const selectRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const selectRef = React.useRef<HTMLDivElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
-  useClickOutside(selectRef, () => setIsOpen(false));
+  React.useEffect(() => {
+    if (!defaultValue) return;
+    if (Array.isArray(defaultValue)) {
+      setSelectedItems(
+        defaultValue.map((value: DropdownValues) => value[itemKey]),
+      );
+    } else {
+      setSelectedItems(defaultValue[itemKey] ? [defaultValue[itemKey]] : []);
+    }
+    setInputValue();
+  }, [defaultValue]);
 
-  const handleFocusOnInput = () => {
+  const setInputFocus = () => {
     if (inputRef.current) {
       inputRef.current.focus();
-      setIsOpen((prev) => !prev);
     }
   };
 
-  const setInput = (value: string = '') => {
+  const setInputValue = (value: string = '') => {
     if (inputRef.current) {
       inputRef.current.value = value;
     }
   };
 
-  const handleSelectItem = (option: string) => {
-    handleFocusOnInput();
-    onInputChangeHandler('');
-    if (multiple) {
-      setInput();
-      setSelectedItems((prevSelected) =>
-        prevSelected.includes(option)
-          ? prevSelected.filter((item) => item !== option)
-          : [...prevSelected, option],
-      );
-    } else {
-      setInput(option);
-      setSelectedItems([option]);
+  const handleSelectItem = (newItem: string | undefined) => {
+    setIsOpen((prev) => !prev);
+    if (newItem) {
+      setInputFocus();
+      onInputChangeHandler('');
+      if (multiple) {
+        setInputValue();
+        setSelectedItems((prevSelected) =>
+          prevSelected.includes(newItem)
+            ? prevSelected.filter((item) => item !== newItem)
+            : [...prevSelected, newItem],
+        );
+      } else {
+        setInputValue(newItem);
+        setSelectedItems([newItem]);
+      }
     }
   };
 
   const onDeleteItem = (
-    e: React.MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     option: string,
   ) => {
     e.stopPropagation();
@@ -57,24 +71,34 @@ const Select: FC<SelectProps> = ({
     );
   };
 
-  const onDeleteAllItems = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onDeleteAllItems = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onInputChangeHandler('');
-    setSelectedItems([]);
-    setInput();
+    setInputValue();
+    setInputFocus();
+    selectedItems.length && setSelectedItems([]);
   };
 
   const onInputChange = (value: string) => {
     onInputChangeHandler(value);
-    if (!isOpen) {
-      setIsOpen(true);
-    }
+    !isOpen && setIsOpen(true);
   };
+
+  const { handleKeyDown } = useKeyboardListNavigation(
+    handleSelectItem,
+    isOpen,
+    'li-elements',
+    () => setIsOpen(false),
+  );
+  useClickOutside(selectRef, () => setIsOpen(false));
 
   return (
     <div ref={selectRef} className={styles.container}>
       <div
-        onClick={handleFocusOnInput}
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+          setInputFocus();
+        }}
         className={`${styles['input-wrapper']} ${
           isOpen ? styles['input-wrapper--open'] : ''
         }`}
@@ -87,33 +111,50 @@ const Select: FC<SelectProps> = ({
                 className={styles['input-content__selected-item']}
               >
                 <span>{item}</span>
-                <div
-                  onClick={(e) => onDeleteItem(e, item)}
+                <button
+                  aria-label={`Delete ${item}`}
+                  onClick={(e) => {
+                    onDeleteItem(e, item);
+                    setInputFocus();
+                  }}
                   className={styles['x-icon']}
                 />
               </div>
             ))}
           <input
             ref={inputRef}
+            onKeyDown={handleKeyDown}
             className={styles['input-content__input']}
             onChange={(e) => onInputChange(e.target.value)}
             placeholder="Type to search..."
           />
         </div>
         {isLoading && <div className={styles['spinner-icon']} />}
-        <div onClick={onDeleteAllItems} className={styles['x-icon']} />
-        <div
+        <button
+          aria-label="Clear options"
+          onClick={onDeleteAllItems}
+          className={styles['x-icon']}
+        />
+        <button
+          aria-label="Open dropdown"
           className={`${styles['arrow-icon']} ${
             isOpen ? styles['arrow-icon--active'] : ''
           }`}
         />
       </div>
       {isOpen && (
-        <ul className={styles['dropdown']}>
+        <ul
+          className={styles['dropdown']}
+          role="listbox"
+          aria-multiselectable={true}
+        >
           {!isLoading ? (
             dropdownValues.length ? (
               dropdownValues.map((option) => (
                 <li
+                  id="li-elements"
+                  tabIndex={0}
+                  onKeyDown={handleKeyDown}
                   key={option.id}
                   onClick={() => handleSelectItem(option[itemKey])}
                   className={`${styles['dropdown__option']} ${
@@ -121,6 +162,12 @@ const Select: FC<SelectProps> = ({
                       ? styles['dropdown__option--selected']
                       : ''
                   }`}
+                  aria-selected={selectedItems.includes(option[itemKey])}
+                  aria-label={
+                    selectedItems.includes(option[itemKey])
+                      ? `${option[itemKey]} selected`
+                      : option[itemKey]
+                  }
                 >
                   {option[itemKey]}
                 </li>
