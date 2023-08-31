@@ -5,3 +5,5 @@ export interface CacheProps {
     expiryDuration?: number;
   };
 }
+
+export type FocusableElement = HTMLElement & { focus: () => void };

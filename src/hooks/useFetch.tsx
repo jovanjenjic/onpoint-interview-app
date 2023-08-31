@@ -3,7 +3,7 @@ import { useCache } from '../context';
 import { debounce, isEqual } from '../utils';
 import { CacheProps } from './types';
 
-export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
+function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState<T | undefined>();
   const { getCache, setCache, deleteCache, clearCache } = useCache();
@@ -48,7 +48,7 @@ export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
     }
   };
 
-  const refetchDebounced = debounce(refetch, 500);
+  const refetchDebounced = debounce(refetch, 300);
 
   React.useEffect(() => {
     if (initialEnabled) refetchDebounced('');
@@ -62,19 +62,4 @@ export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
   } as const;
 }
 
-export const useClickOutside = (
-  ref: React.RefObject<HTMLElement>,
-  callback: () => void,
-) => {
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, callback]);
-};
+export default useFetch;

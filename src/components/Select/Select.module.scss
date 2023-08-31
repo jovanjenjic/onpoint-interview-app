@@ -89,18 +89,18 @@
 }
 
 .arrow-icon  {
-  width: 8px;
-  height: 8px;
+  height: 14px;
+  background-color: inherit;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: calc(var(--spacing) * 0.5) var(--spacing) 0;
+  margin: calc(var(--spacing) * 0.7) var(--spacing) 0;
   border: solid var(--gs-400);
   border-width: 0 2px 2px 0;
-  transform: rotate(225deg);
+  transform: rotate(225deg) scale(0.8);
 
   &--active {
-    margin-top: calc(var(--spacing) * -0.5);
-    transform: rotate(45deg);
+    margin-top: calc(var(--spacing) * -0.7);
+    transform: rotate(45deg) scale(0.8);
   }
 }
 
@@ -114,6 +114,8 @@
 }
 
 .x-icon {
+  border: none;
+  background: inherit;
   cursor: pointer;
   margin-left: 8px;
   &::before {
