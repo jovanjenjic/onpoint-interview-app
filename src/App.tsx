@@ -12,18 +12,18 @@ function App() {
   } = useFetch<ApiResponse[]>({
     cache: {
       enabled: true,
-      expiryDuration: 10,
+      expiryDuration: 100,
     },
   });
-
-  const handleInputChange = React.useCallback((newQueryString: string) => {
+  const handleInputChange = (newQueryString: string) => {
     refetch(newQueryString);
-  }, []);
+  };
 
   return (
     <div style={{ maxWidth: '600px', margin: 'auto' }}>
       <Select
-        dropdownValues={data.map((data) => data.name)}
+        dropdownValues={data}
+        itemKey="name"
         isLoading={loading}
         multiple={true}
         onInputChangeHandler={handleInputChange}

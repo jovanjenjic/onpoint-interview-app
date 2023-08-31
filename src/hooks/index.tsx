@@ -1,6 +1,6 @@
 import React from 'react';
-import { useCache } from '@base/context';
-import { debounce } from '@base/utils';
+import { useCache } from '../context';
+import { debounce, isEqual } from '../utils';
 import { CacheProps } from './types';
 
 export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
@@ -10,29 +10,35 @@ export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
 
   const refetch = async (queryString: string, hard: boolean = false) => {
     if (cache?.enabled && getCache(queryString) !== null && !hard) {
-      setData(getCache(queryString));
-      setLoading(false);
-      return;
+      const cachedData = getCache(queryString);
+      setData((prev) => {
+        if (isEqual(prev as unknown[], cachedData)) {
+          return prev;
+        }
+        return cachedData;
+      });
+    } else {
+      setLoading(true);
+
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        const filteredData = Array.from({ length: 10 }, (_, index) => ({
+          id: index,
+          name: `Option ${index + 1}`,
+        })).filter((item) =>
+          item.name.toLowerCase().includes(queryString.toLowerCase()),
+        );
+        setData(filteredData as T);
+        if (cache?.enabled) {
+          setCache(queryString, filteredData, cache.expiryDuration);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const filteredData = Array.from({ length: 10 }, (_, index) => ({
-      id: index,
-      name: `Option ${index + 1}`,
-    })).filter((item) =>
-      item.name.toLowerCase().includes(queryString.toLowerCase()),
-    );
-    setData(filteredData as T);
-    if (cache?.enabled)
-      setCache(queryString, filteredData, cache.expiryDuration);
-    setLoading(false);
   };
-
-  const refetchDebounced = debounce(
-    refetch,
-    500,
-    () => !loading && setLoading(true),
-  );
 
   const inValidate = (queryString: string) => {
     if (queryString !== null) {
@@ -42,11 +48,18 @@ export function useFetch<T>({ initialEnabled = true, cache }: CacheProps) {
     }
   };
 
+  const refetchDebounced = debounce(refetch, 500);
+
   React.useEffect(() => {
     if (initialEnabled) refetchDebounced('');
   }, []);
 
-  return { loading, data, refetch: refetchDebounced, inValidate } as const;
+  return {
+    loading,
+    data,
+    refetch: refetchDebounced,
+    inValidate,
+  } as const;
 }
 
 export const useClickOutside = (

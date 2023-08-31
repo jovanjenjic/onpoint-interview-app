@@ -5,27 +5,44 @@ import { useClickOutside } from '../../hooks';
 
 const Select: FC<SelectProps> = ({
   dropdownValues,
+  itemKey = 'id',
   isLoading,
   multiple,
   onInputChangeHandler,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [filterText, setFilterText] = useState<string>('');
 
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  useClickOutside(dropdownRef, () => setIsOpen(false));
+  const selectRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleClickItem = (option: string) => {
-    setIsOpen(false);
+  useClickOutside(selectRef, () => setIsOpen(false));
+
+  const handleFocusOnInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      setIsOpen((prev) => !prev);
+    }
+  };
+
+  const setInput = (value: string = '') => {
+    if (inputRef.current) {
+      inputRef.current.value = value;
+    }
+  };
+
+  const handleSelectItem = (option: string) => {
+    handleFocusOnInput();
+    onInputChangeHandler('');
     if (multiple) {
+      setInput();
       setSelectedItems((prevSelected) =>
         prevSelected.includes(option)
           ? prevSelected.filter((item) => item !== option)
           : [...prevSelected, option],
       );
     } else {
-      setFilterText(option);
+      setInput(option);
       setSelectedItems([option]);
     }
   };
@@ -41,24 +58,23 @@ const Select: FC<SelectProps> = ({
   };
 
   const onDeleteAllItems = (e: React.MouseEvent<HTMLDivElement>) => {
-    onInputChangeHandler('');
     e.stopPropagation();
+    onInputChangeHandler('');
     setSelectedItems([]);
-    setFilterText('');
+    setInput();
   };
 
   const onInputChange = (value: string) => {
     onInputChangeHandler(value);
-    setFilterText(value);
     if (!isOpen) {
       setIsOpen(true);
     }
   };
 
   return (
-    <div ref={dropdownRef} className={styles.container}>
+    <div ref={selectRef} className={styles.container}>
       <div
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleFocusOnInput}
         className={`${styles['input-wrapper']} ${
           isOpen ? styles['input-wrapper--open'] : ''
         }`}
@@ -78,8 +94,8 @@ const Select: FC<SelectProps> = ({
               </div>
             ))}
           <input
+            ref={inputRef}
             className={styles['input-content__input']}
-            value={filterText}
             onChange={(e) => onInputChange(e.target.value)}
             placeholder="Type to search..."
           />
@@ -98,15 +114,15 @@ const Select: FC<SelectProps> = ({
             dropdownValues.length ? (
               dropdownValues.map((option) => (
                 <li
-                  key={option}
-                  onClick={() => handleClickItem(option)}
+                  key={option.id}
+                  onClick={() => handleSelectItem(option[itemKey])}
                   className={`${styles['dropdown__option']} ${
-                    selectedItems.includes(option)
+                    selectedItems.includes(option[itemKey])
                       ? styles['dropdown__option--selected']
                       : ''
                   }`}
                 >
-                  {option}
+                  {option[itemKey]}
                 </li>
               ))
             ) : (
@@ -129,4 +145,4 @@ const Select: FC<SelectProps> = ({
   );
 };
 
-export default React.memo(Select);
+export default Select;
