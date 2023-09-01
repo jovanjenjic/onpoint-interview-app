@@ -10,25 +10,29 @@ const Select: React.FC<SelectProps> = ({
   isLoading,
   multiple,
   onInputChangeHandler,
-  defaultValue,
+  initValue,
 }) => {
+  // State for managing the dropdown's open/close state
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  // State for managing selected items
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
 
+  // References to HTML elements
   const selectRef = React.useRef<HTMLDivElement | null>(null);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
-    if (!defaultValue) return;
-    if (Array.isArray(defaultValue)) {
+    // Initialize selected items based on initial value
+    if (!initValue) return;
+    if (Array.isArray(initValue)) {
       setSelectedItems(
-        defaultValue.map((value: DropdownValues) => value[itemKey]),
+        initValue.map((value: DropdownValues) => value[itemKey]),
       );
     } else {
-      setSelectedItems(defaultValue[itemKey] ? [defaultValue[itemKey]] : []);
+      setSelectedItems(initValue[itemKey] ? [initValue[itemKey]] : []);
     }
     setInputValue();
-  }, [defaultValue]);
+  }, [initValue]);
 
   const setInputFocus = () => {
     if (inputRef.current) {
@@ -42,6 +46,7 @@ const Select: React.FC<SelectProps> = ({
     }
   };
 
+  // Function to handle item selection
   const handleSelectItem = (newItem: string | undefined) => {
     setIsOpen((prev) => !prev);
     if (newItem) {
@@ -61,6 +66,7 @@ const Select: React.FC<SelectProps> = ({
     }
   };
 
+  // Function to handle item deletion
   const onDeleteItem = (
     e: React.MouseEvent<HTMLButtonElement>,
     option: string,
@@ -71,6 +77,7 @@ const Select: React.FC<SelectProps> = ({
     );
   };
 
+  // Function to handle deleting all items
   const onDeleteAllItems = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onInputChangeHandler('');
@@ -79,17 +86,21 @@ const Select: React.FC<SelectProps> = ({
     selectedItems.length && setSelectedItems([]);
   };
 
+  // Function to handle input value change
   const onInputChange = (value: string) => {
     onInputChangeHandler(value);
     !isOpen && setIsOpen(true);
   };
 
+  // Custom hook for handling keyboard navigation
   const { handleKeyDown } = useKeyboardListNavigation(
     handleSelectItem,
     isOpen,
     'li-elements',
     () => setIsOpen(false),
   );
+
+  // Custom hook for detecting clicks outside the component
   useClickOutside(selectRef, () => setIsOpen(false));
 
   return (

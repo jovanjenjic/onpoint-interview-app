@@ -6,7 +6,7 @@ import styles from './App.module.scss';
 import useFetch from './hooks/useFetch';
 
 function App() {
-  const [defaultValue, setDefaultValue] = React.useState<
+  const [initValue, setInitValue] = React.useState<
     DropdownValues | DropdownValues[]
   >([
     {
@@ -29,6 +29,10 @@ function App() {
     refetch(newQueryString);
   };
 
+  const onSubmit = React.useCallback(() => {
+    setInitValue([]);
+  }, [setInitValue]);
+
   return (
     <div className={styles.wrapper}>
       <Select
@@ -37,15 +41,10 @@ function App() {
         isLoading={loading}
         multiple={true}
         onInputChangeHandler={handleInputChange}
-        defaultValue={defaultValue}
+        initValue={initValue}
       />
       <div className={styles['button-wrapper']}>
-        <Button
-          type="primary"
-          text="Submit"
-          isLoading={loading}
-          onClick={() => setDefaultValue((prev) => (prev.length ? [] : prev))}
-        />
+        <Button type="primary" text="Submit" onClick={onSubmit} />
       </div>
     </div>
   );

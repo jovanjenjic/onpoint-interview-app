@@ -1,6 +1,14 @@
 import React from 'react';
 import { FocusableElement } from './types';
 
+/**
+ * Hook for keyboard navigation through a list of elements
+ * @param handleSelectItem Function to select an item
+ * @param isNavigationShowed Whether navigation is displayed
+ * @param listElementId ID of the list element in DOM
+ * @param onTab Function to handle the Tab key
+ * @returns
+ */
 const useKeyboardListNavigation = <T extends FocusableElement>(
   handleSelectItem: (selectedText: string | undefined) => void,
   isNavigationShowed: boolean,
@@ -9,6 +17,7 @@ const useKeyboardListNavigation = <T extends FocusableElement>(
 ) => {
   const liRef = React.useRef<T | null>(null);
 
+  // Function to return the first list item
   const firstListItem = () => {
     const liElements = Array.from(
       document.querySelectorAll(`#${listElementId}`),
@@ -16,6 +25,7 @@ const useKeyboardListNavigation = <T extends FocusableElement>(
     return liElements[0];
   };
 
+  // Handling keyboard events
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<T>) => {
       if (e.key === 'Enter') {
