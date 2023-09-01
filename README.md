@@ -38,10 +38,6 @@ This repository contains instructions on how to run this React application.
    npm start
    ```
 
-   The application will start and be accessible in your browser at `http://localhost:3000`.
-
-   Certainly! Here's a brief documentation for the `Select` component, including the purpose of each prop and an example of how to use the component:
-
 ---
 
 # Select Component Documentation
