@@ -8,9 +8,9 @@ const Button: React.FC<ButtonProps> = ({ type, text, onClick, isLoading }) => {
       onClick();
     }
   };
+
   return (
     <button
-      style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
       className={`
       ${styles['button']}  
       ${styles[`button${type === 'primary' ? '__primary' : '__secondary'}`]}`}
@@ -21,4 +21,4 @@ const Button: React.FC<ButtonProps> = ({ type, text, onClick, isLoading }) => {
   );
 };
 
-export default Button;
+export default React.memo(Button);
