@@ -24,6 +24,7 @@ const Select: React.FC<SelectProps> = ({
   React.useEffect(() => {
     // Initialize selected items based on initial value
     if (!initValue) return;
+
     if (Array.isArray(initValue)) {
       setSelectedItems(
         initValue.map((value: DropdownValues) => value[itemKey]),
@@ -49,20 +50,19 @@ const Select: React.FC<SelectProps> = ({
   // Function to handle item selection
   const handleSelectItem = (newItem: string | undefined) => {
     setIsOpen((prev) => !prev);
-    if (newItem) {
-      setInputFocus();
-      onInputChangeHandler('');
-      if (multiple) {
-        setInputValue();
-        setSelectedItems((prevSelected) =>
-          prevSelected.includes(newItem)
-            ? prevSelected.filter((item) => item !== newItem)
-            : [...prevSelected, newItem],
-        );
-      } else {
-        setInputValue(newItem);
-        setSelectedItems([newItem]);
-      }
+    if (!newItem) return;
+
+    onInputChangeHandler('');
+    setInputFocus();
+    setInputValue(multiple ? '' : newItem);
+    if (multiple) {
+      setSelectedItems((prevSelected) =>
+        prevSelected.includes(newItem)
+          ? prevSelected.filter((item) => item !== newItem)
+          : [...prevSelected, newItem],
+      );
+    } else {
+      setSelectedItems([newItem]);
     }
   };
 
@@ -89,13 +89,14 @@ const Select: React.FC<SelectProps> = ({
   // Function to handle input value change
   const onInputChange = (value: string) => {
     onInputChangeHandler(value);
-    !isOpen && setIsOpen(true);
+    if (!isOpen) {
+      setIsOpen(true);
+    }
   };
 
   // Custom hook for handling keyboard navigation
   const { handleKeyDown } = useKeyboardListNavigation(
     handleSelectItem,
-    isOpen,
     'li-elements',
     () => setIsOpen(false),
   );
