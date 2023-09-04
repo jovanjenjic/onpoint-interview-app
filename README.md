@@ -135,6 +135,7 @@ The `useFetch` hook is designed to manage data fetching with optional caching. I
 
    ```javascript
    const { loading, data, refetch, inValidate } = useFetch({
+     url: 'https://www.something.com'
      initialEnabled: true, // Optional: Set to true to fetch data initially
      cache: {
        enabled: true, // Optional: Enable caching
