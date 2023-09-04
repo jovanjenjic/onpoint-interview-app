@@ -1,4 +1,5 @@
 export interface CacheProps {
+  url: string;
   initialEnabled?: boolean;
   cache?: {
     enabled?: boolean;

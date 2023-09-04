@@ -19,6 +19,7 @@ function App() {
     data = [],
     refetch,
   } = useFetch<ApiResponse[]>({
+    url: 'https://www.something.com',
     cache: {
       enabled: true,
       expiryDuration: 100,
